@@ -1,1 +1,1 @@
-console.log('Running Marketing')
+import('./bootstrap');
