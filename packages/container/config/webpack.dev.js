@@ -8,7 +8,7 @@ const packageJson = require('../package.json');
 const devConfig = {
   mode: 'development',
   devServer: {
-    port: 8081,
+    port: 8080,
     historyApiFallback: {
       index: 'index.html',
     },
@@ -18,11 +18,12 @@ const devConfig = {
       template: './public/index.html',
     }),
     new ModuleFederationPlugin({
-      name: 'marketing',
-      filename: 'remoteEntry.js',
-      exposes: {
-        './MarketingApp': './src/bootstrap',
+      name: 'container',
+      remotes: {
+        marketing: 'marketing@http://localhost:8081/remoteEntry.js',
       },
+      //essa opção permite importar todas as dependencias que não são "dev" para os módulos compartilhados
+      // não recomendado caso voce queira especificar apenas alguns módulos especificos
       shared: packageJson.dependencies,
     }),
   ],
