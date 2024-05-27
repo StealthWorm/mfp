@@ -18,7 +18,7 @@ const prodConfig = {
       name: 'container',
       remotes: {
         // precisamos garantir que na AWS exista um folder com essa estrutura
-        marketing: `marketing@${domain}/marketing/remoteEntry.js`,
+        marketing: `marketing@${domain}/marketing/latest/remoteEntry.js`,
       },
       shared: packageJson.dependencies,
     }),
