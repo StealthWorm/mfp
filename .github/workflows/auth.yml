@@ -1,0 +1,36 @@
+name: deploy-marketing
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'packages/auth/**'
+
+defaults:
+  run:
+    working-directory: packages/auth
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm run build
+
+      - uses: shinyinc/action-aws-cli@v1.2
+      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/auth/latest
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_EC2_METADATA_DISABLED: true # For some reason setting this env variable to true fixes the error "exit code 255".
+          AWS_DEFAULT_REGION: 'sa-east-1' #region of the created AWS Bucket for the application
+
+      #sempre que criamos um arquivo novo ou atualizado no bucket, o cluoudfront precisa de uma maneira de invalidar a versão anterior dessa imagem do bucket, para sempre utilizar a versão mais recente do arquivo em build
+      - run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/auth/latest/remoteEntry.js"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'sa-east-1'
