@@ -8,12 +8,15 @@ const packageJson = require('../package.json');
 const devConfig = {
   mode: 'development',
   output: {
-    publicPath: 'http://localhost:8082/',
+    publicPath: 'http://localhost:8083/',
   },
   devServer: {
-    port: 8082,
+    port: 8083,
     historyApiFallback: {
       index: '/index.html',
+    },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
     },
   },
   plugins: [
@@ -25,10 +28,10 @@ const devConfig = {
       template: './public/index.html',
     }),
     new ModuleFederationPlugin({
-      name: 'auth',
+      name: 'dashboard',
       filename: 'remoteEntry.js',
       exposes: {
-        './AuthApp': './src/bootstrap',
+        './DashboardApp': './src/bootstrap',
       },
       shared: packageJson.dependencies,
     }),

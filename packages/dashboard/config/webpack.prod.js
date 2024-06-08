@@ -9,14 +9,14 @@ const prodConfig = {
     filename: '[name].[contenthash].js',
     // publicPath sera usada sempre que tiver uma parte do webpack que tenta referenciar um arquivo que passou pelo build
     // como no nosso bucket da S3 definimos que os arquivos em produção serão redirecionados para o caminho "/auth/latest", setamos este caminho como publicPath
-    publicPath: '/auth/latest/',
+    publicPath: '/dashboard/latest/',
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: 'auth',
+      name: 'dashboard',
       filename: 'remoteEntry.js',
       exposes: {
-        './AuthApp': './src/bootstrap',
+        './DashboardApp': './src/bootstrap',
       },
       shared: packageJson.dependencies,
     }),
