@@ -22,6 +22,7 @@ const devConfig = {
       remotes: {
         marketing: 'marketing@http://localhost:8081/remoteEntry.js',
         auth: 'auth@http://localhost:8082/remoteEntry.js',
+        dashboard: 'dashboard@http://localhost:8083/remoteEntry.js',
       },
       //essa opção permite importar todas as dependencias que não são "dev" para os módulos compartilhados
       // não recomendado caso voce queira especificar apenas alguns módulos especificos
